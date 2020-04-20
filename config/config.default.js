@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1582444646911_379';
 
   // add your middleware config here
-  config.middleware = [ 'auth' ];
+  // config.middleware = [ 'auth' ];
 
   // add your user config here
   const userConfig = {
@@ -55,7 +55,7 @@ module.exports = appInfo => {
   config.cluster = {
     listen: {
       port: 20980,
-      hostname: '127.0.0.1',
+      // hostname: '127.0.0.1',
       // path: '/var/run/egg.sock',
     },
   };
@@ -81,7 +81,7 @@ module.exports = appInfo => {
       host: '127.0.0.1',
       port: 50005,
       type: 'tcp',
-      version: 2.001,
+      version: 2.007,
     },
   };
 
@@ -123,7 +123,8 @@ module.exports = appInfo => {
   config.redis = {
     client: {
       port: 6379, // Redis port
-      host: '127.0.0.1', // Redis host
+      host: '101.201.239.227', // Redis host http://101.201.239.227/
+      // host: '127.0.0.1',
       password: '',
       db: 0,
     },
