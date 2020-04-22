@@ -14,93 +14,88 @@ module.exports = app => {
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    client_id: {
+    clientid: {
       type: DataTypes.STRING,
     },
-    seller_id: {
+    storeid: {
       type: DataTypes.STRING,
     },
-    knight_id: {
+    activityid: {
       type: DataTypes.STRING,
     },
-    address: {
+    out_refund_no: { // 退单单号
       type: DataTypes.STRING,
     },
-    short_num: {
-      type: DataTypes.STRING,
-    },
-    out_trade_no: {
-      type: DataTypes.STRING,
-    },
-    device: {
-      type: DataTypes.STRING,
-    },
-    type: {
+    refund_fee: { // 退费金额
       type: DataTypes.INTEGER,
     },
-    spbill_create_ip: {
+    refund_desc: { // 退费原因
       type: DataTypes.STRING,
     },
-    gift_fee: {
-      type: DataTypes.INTEGER,
+    refundAt: { // 退费时间
+      // type: DataTypes.STRING,
+      type: DataTypes.DATE,
+      get refundAt() {
+        return moment(Order.getDataValue('refundAt')).format('YYYY-MM-DD HH:mm:ss');
+      },
     },
-    discount_fee: {
-      type: DataTypes.INTEGER,
-    },
-    express_fee: {
+    usestruts: {
       type: DataTypes.INTEGER,
     },
     total_fee: {
       type: DataTypes.INTEGER,
     },
-    goods_detail: {
+    origin_fee: {
+      type: DataTypes.INTEGER,
+    },
+    tags: {
       type: DataTypes.STRING,
     },
     remark: {
       type: DataTypes.STRING,
     },
-    er_pic: {
+    acode_url: {
       type: DataTypes.STRING,
     },
-    created: {
+    prepayAt: {
       type: DataTypes.DATE,
-      get created() {
-        return moment(Order.getDataValue('created')).format('YYYY-MM-DD HH:mm:ss');
+      get prepayAt() {
+        return moment(Order.getDataValue('prepayAt')).format('YYYY-MM-DD HH:mm:ss');
+      },
+    },
+    payAt: {
+      type: DataTypes.DATE,
+      get payAt() {
+        return moment(Order.getDataValue('payAt')).format('YYYY-MM-DD HH:mm:ss');
+      },
+    },
+    payfailAt: {
+      type: DataTypes.DATE,
+      get payfailAt() {
+        return moment(Order.getDataValue('payfailAt')).format('YYYY-MM-DD HH:mm:ss');
+      },
+    },
+    payfailReason: {
+      type: DataTypes.STRING,
+    },
+    useAt: {
+      type: DataTypes.DATE,
+      get useAt() {
+        return moment(Order.getDataValue('useAt')).format('YYYY-MM-DD HH:mm:ss');
+      },
+    },
+    createAt: {
+      type: DataTypes.DATE,
+      get createAt() {
+        return moment(Order.getDataValue('createAt')).format('YYYY-MM-DD HH:mm:ss');
       },
       defaultValue: DataTypes.NOW,
     },
-    school_id: {
+    referral_client: { // 推荐用户
+      type: DataTypes.STRING,
+    },
+    referral_fee: { // 活动推荐费
       type: DataTypes.INTEGER,
-    },
-    realname: {
-      type: DataTypes.STRING,
-    },
-    gender: {
-      type: DataTypes.INTEGER,
-    },
-    mobile: {
-      type: DataTypes.STRING,
-    },
-    school_area: {
-      type: DataTypes.STRING,
-    },
-    detail: {
-      type: DataTypes.STRING,
-    },
-    dorm_id: {
-      type: DataTypes.STRING,
-    },
-    floor: {
-      type: DataTypes.INTEGER,
-    },
-    is_first: {
-      type: DataTypes.INTEGER,
-    },
-    dorm_no: {
-      type: DataTypes.INTEGER,
-    },
-    rush_activity_id: {
-      type: DataTypes.STRING,
     },
   }, {
     tableName: 'order',
@@ -108,8 +103,9 @@ module.exports = app => {
   });
 
   Order.associate = () => {
-    Order.belongsTo(app.model.Address, { foreignKey: 'address', targetKey: 'id', as: 'orderAddress' });
-    Order.belongsTo(app[modelName].Ordergoodsrelation, { foreignKey: 'out_trade_no', targetKey: 'out_trade_no', as: 'ordergoodsrelation' });
+    Order.belongsTo(app[modelName].Activities, { foreignKey: 'activityid', targetKey: 'id', as: 'activity' });
+    Order.belongsTo(app[modelName].XqClient, { foreignKey: 'clientid', targetKey: 'id', as: 'client' });
+    Order.belongsTo(app[modelName].StoreInfos, { foreignKey: 'storeid', targetKey: 'id', as: 'storeInfo' });
     // Order.belongsTo(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
     // Order.hasMany(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
   };

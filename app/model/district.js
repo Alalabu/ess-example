@@ -7,7 +7,7 @@ const modelName = dirSep[dirSep.length - 1];
 module.exports = app => {
   const DataTypes = app.Sequelize;
 
-  const City = app[modelName].define('city', {
+  const District = app[modelName].define('district', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -18,22 +18,19 @@ module.exports = app => {
     name: {
       type: DataTypes.STRING,
     },
-    provincecode: {
-      type: DataTypes.STRING,
-    },
-    title: {
+    citycode: {
       type: DataTypes.STRING,
     },
   }, {
-    tableName: 'city',
+    tableName: 'district',
     timestamps: false,
   });
 
-  City.associate = () => {
-    // City.belongsTo(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
-    // City.hasMany(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
+  District.associate = () => {
+    // District.belongsTo(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
+    // District.hasMany(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
   };
 
-  return City;
+  return District;
 };
 

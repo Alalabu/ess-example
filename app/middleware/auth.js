@@ -14,23 +14,19 @@ module.exports = (options, app) => {
 
     // 2. 获取 header 头token
     const { authorization = '' } = ctx.header;
-    if (!authorization) ctx.returnError('您没有权限访问该接口!', 0, 401);
-    const token = authorization.replace('Bearer ', '');
+    if (!authorization) ctx.returnError(ctx.message.auth.noAuth());
 
     // 3. 根据token解密，换取用户信息
     let user = {};
     try {
-      user = ctx.jwt.verify(token, app.config.jwt.secret);
+      user = ctx.jwt.verify(authorization, app.config.jwt.secret);
     } catch (err) {
-      err.name === 'TokenExpiredError' ? ctx.returnError('token 已过期! 请重新获取令牌') :
-        ctx.returnError('Token 令牌不合法!');
+      err.name === 'TokenExpiredError' ? ctx.returnError(ctx.message.auth.timeout()) :
+        ctx.returnError(ctx.message.auth.invalid());
     }
 
     // 4. 把 user 信息挂载到全局 ctx 上
-    ctx.auth = {
-      uid: user.uid,
-      scope: user.scope,
-    };
+    ctx.auth = user;
 
     // 5. 继续执行
     await next(options);

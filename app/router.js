@@ -12,6 +12,8 @@ module.exports = app => {
   router.post('注册', '/register', controller.user.register);
   router.post('女生最爱TOP10', '/findGirlsFondness', controller.home.findGirlsFondness);
 
-  router.resources('REST address', '/address', controller.address);
-  // router.resources('{"name": "地址管理", "type": "rest"}', '/address', controller.address);
+  router.post('订单生成', '/newOrder', controller.user.newOrder);
+
+  router.post('/clientLogin', controller.access.clientLogin);
+
 };

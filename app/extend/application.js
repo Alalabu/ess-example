@@ -6,9 +6,9 @@ module.exports = {
    * 生成 Token
    * @param { Object } params 带封装的参数对象
    */
-  generateToken(params = {}) {
-    return jwt.sign(params, this.config.jwt.secret, {
-      expiresIn: this.config.jwt.expiresIn,
+  generateToken({ params = {}, secret, expiresIn = 24 * 60 * 60 }) {
+    return jwt.sign(params, secret || this.app.config.jwt.secret, {
+      expiresIn: expiresIn || this.app.config.jwt.expiresIn,
     });
   },
 };

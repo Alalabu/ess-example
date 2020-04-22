@@ -1,23 +1,55 @@
+/* eslint-disable no-return-assign */
 'use strict';
 
 const Cryptojs = require('crypto-js');
 const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+
+const ResponseMessageConfig = require('../../config/message.config.js');
+const ResponseMessage = Symbol('Response#Message');
 
 module.exports = {
+  // 加载响应消息配置, 统一封装响应消息在 Context 中的调用
+  get message() {
+    if (!this[ResponseMessage]) {
+      // 加载 响应消息对象
+      const resMsg = (function loadConfig(config) {
+        if (_.isArray(config)) return function(attach) { return { err: config[0], msg: config[1], attach }; };
+        const msg = {};
+        Object.keys(config).forEach(key => msg[key] = loadConfig(config[key]));
+        return msg;
+      })(ResponseMessageConfig);
+      this[ResponseMessage] = resMsg;
+    }
+    return this[ResponseMessage];
+  },
 
   get jwt() {
     return jwt;
   },
 
-  returnSucc(msg = '成功', code = 0, httpCode = 200) {
-    throw new global.myErrors(msg, code, httpCode);
+  returnSuccess({ msg = '成功', err = 0, data = null }) {
+    return { msg, err, data };
   },
 
-  returnError(msg = '失败', code = 1, httpCode = 400) {
-    throw new global.myErrors(msg, code, httpCode);
+  returnError({ msg = '失败', err = 100, attach = null }) {
+    this.logger.error({ err, msg, attach });
+    throw new Error(msg);
   },
 
   crypto(value) {
     return Cryptojs.HmacSHA256(value, 'drw_admin888').toString();
   },
+
+  /**
+   * 生成 Token
+   * @param { Object } params token封装参数
+   */
+  generateToken({ params = {}, secret, expiresIn = 24 * 60 * 60 }) {
+    return jwt.sign(params, secret || this.app.config.jwt.secret, {
+      expiresIn: expiresIn || this.app.config.jwt.expiresIn,
+    });
+  },
+
+
 };

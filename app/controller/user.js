@@ -15,6 +15,12 @@ class UserController extends Controller {
     console.log('\x1b[39m[Seneca API] [register] \x1b[0m=> ', ctx.request.body);
     ctx.body = { msg: 'hi, egg register: ' + Object.keys(ctx.request.body).join(',') };
   }
+
+  async newOrder() {
+    const { ctx } = this;
+    const { username, price } = ctx.request.body;
+    ctx.body = await ctx.service.user.newOrder(username, price);
+  }
 }
 
 module.exports = UserController;

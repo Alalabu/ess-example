@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1582444646911_379';
 
   // add your middleware config here
-  // config.middleware = [ 'auth' ];
+  config.middleware = [ 'auth' ];
 
   // add your user config here
   const userConfig = {
@@ -46,6 +46,7 @@ module.exports = appInfo => {
     allowed: [// 排除的接口
       '/user/register',
       '/user/login',
+      '/clientLogin',
     ],
   };
 
@@ -85,20 +86,45 @@ module.exports = appInfo => {
     },
   };
 
-  const gongfu_kuaisong = {
-    host: '39.104.190.35',
-    port: 53306,
-    database: 'luv_db_2',
-    username: 'baihaiou9',
-    password: 'sHeuN.DaTAbasE201.810',
+  // const gongfu_kuaisong = {
+  //   host: '39.104.190.35',
+  //   port: 53306,
+  //   database: 'luv_db_2',
+  //   username: 'baihaiou9',
+  //   password: 'sHeuN.DaTAbasE201.810',
+  // };
+
+  const SheuShiJiServer = {
+    gongfu: {
+      host: '39.104.190.35',
+      port: 53306,
+      database: 'luv_ticket',
+      username: 'baihaiou9',
+      password: 'sHeuN.DaTAbasE201.810',
+    },
+    local: {
+      host: '127.0.0.1',
+      port: 53306,
+      database: 'luv_ticket',
+      username: 'root',
+      password: 'root',
+    },
   };
+  // const localDB = {
+  //   host: '127.0.0.1',
+  //   port: 53306,
+  //   database: 'luv_db_2',
+  //   username: 'root',
+  //   password: 'root',
+  // };
 
   config.sequelize = {
     dialect: 'mysql',
-    ...gongfu_kuaisong,
+    // ...gongfu_kuaisong,
+    ...SheuShiJiServer.local,
     timezone: '+08:00',
     pool: {
-      max: 50,
+      max: 100,
       min: 5,
       idle: 10000,
       acquire: 20000,

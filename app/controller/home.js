@@ -18,7 +18,7 @@ class HomeController extends Controller {
   async checkToken() {
     const { ctx } = this;
     console.log('\x1b[39m[Seneca API] [checkToken] \x1b[0m=> ', ctx.request.body);
-    ctx.body = { msg: 'hi, egg checkToken: ' + Object.keys(ctx.request.body).join(',') };
+    ctx.body = { msg: 'hi, egg checkToken: ' + Object.keys(ctx.request.body).join(','), currentUser: ctx.auth };
   }
 
   async findGirlsFondness() {
