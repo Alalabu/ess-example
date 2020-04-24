@@ -14,15 +14,20 @@ module.exports = (options, app) => {
 
     // 2. 获取 header 头token
     const { authorization = '' } = ctx.header;
-    if (!authorization) ctx.returnError(ctx.message.auth.noAuth());
+    if (!authorization) {
+      ctx.body = ctx.returnWarn(ctx.message.auth.noAuth());
+      return;
+    }
 
     // 3. 根据token解密，换取用户信息
     let user = {};
     try {
       user = ctx.jwt.verify(authorization, app.config.jwt.secret);
     } catch (err) {
-      err.name === 'TokenExpiredError' ? ctx.returnError(ctx.message.auth.timeout()) :
-        ctx.returnError(ctx.message.auth.invalid());
+      ctx.body = (err.name === 'TokenExpiredError') ?
+        ctx.returnWarn(ctx.message.auth.timeout()) :
+        ctx.returnWarn(ctx.message.auth.invalid());
+      return;
     }
 
     // 4. 把 user 信息挂载到全局 ctx 上

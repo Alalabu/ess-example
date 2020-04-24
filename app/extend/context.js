@@ -39,8 +39,12 @@ module.exports = {
     return { msg, err, data };
   },
 
+  returnWarn({ msg = '失败', err = 99, attach = null }) {
+    this.logger.warn({ err, msg, attach });
+    return { msg, err, attach };
+  },
+
   returnError({ msg = '失败' }) {
-    // this.logger.error({ err, msg, attach });
     throw new Error(msg);
   },
 

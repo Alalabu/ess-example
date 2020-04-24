@@ -32,10 +32,8 @@ class AccessController extends Controller {
     const { loginCode } = ctx.request.body;
     // 首先通过 loginCode 换取 session_key (mmp)
     const wxurl = `https://api.weixin.qq.com/sns/jscode2session?appid=${ShiJi_Client.appid}&secret=${ShiJi_Client.appsecret}&js_code=${loginCode}&grant_type=authorization_code`;
-    // console.log('验证登录权限 01, wxurl => ', wxurl);
     // 换取的结果中包含 openid 及 session_key
     const wx_result = (await ctx.curl(wxurl, { dataType: 'json' })).data;
-    // console.log('验证登录权限 02, wx_result => ', wx_result);
     // openid不存在的情况
     if (!wx_result.openid) {
       ctx.logger.warn(`系统审核用户登录 =>  OPENID = ${wx_result.openid}`);

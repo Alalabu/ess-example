@@ -45,9 +45,9 @@ module.exports = appInfo => {
   // 鉴权配置
   config.auth = {
     allowed: [// 排除的接口
-      '/user/register',
-      '/user/login',
+      '/login',
       '/clientLogin',
+      '/getError',
     ],
   };
 
@@ -86,7 +86,7 @@ module.exports = appInfo => {
       type: 'tcp',
       version: 2.007,
     },
-    devLog: true,
+    devLog: false,
   };
 
   // const gongfu_kuaisong = {

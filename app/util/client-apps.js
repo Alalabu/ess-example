@@ -11,6 +11,6 @@ class ClientApp {
 }
 
 module.exports = {
-  ShiJi_Client: new ClientApp('wxe8235731204bc54c', '91828c31e5b35ffd9bfb6393204af2d7'),
-  ShiJi_Seller: new ClientApp('wxca2ddba40596d5de', '1b72048d5f829da396ddf9360891b138'),
+  ShiJi_Client: new ClientApp('client_app_id', 'client_app_secret'),
+  ShiJi_Seller: new ClientApp('seller_app_id', 'seller_app_secret'),
 };
