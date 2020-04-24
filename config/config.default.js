@@ -36,6 +36,7 @@ module.exports = appInfo => {
     },
   };
 
+  // jsonwebtoken 常量配置
   config.jwt = {
     secret: 'bcrypt',
     expiresIn: 7 * 24 * 60 * 60, // 一周过期
@@ -56,11 +57,12 @@ module.exports = appInfo => {
   config.cluster = {
     listen: {
       port: 20980,
-      // hostname: '127.0.0.1',
-      // path: '/var/run/egg.sock',
     },
   };
 
+  /**
+   * 日志配置
+   */
   config.logger = {
     // outputJSON: true,
     dir: '../logs/egg-seneca-server',
@@ -84,6 +86,7 @@ module.exports = appInfo => {
       type: 'tcp',
       version: 2.007,
     },
+    devLog: true,
   };
 
   // const gongfu_kuaisong = {
@@ -146,6 +149,9 @@ module.exports = appInfo => {
     },
   };
 
+  /**
+   * redis 缓存配置
+   */
   config.redis = {
     client: {
       port: 6379, // Redis port

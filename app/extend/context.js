@@ -13,8 +13,15 @@ module.exports = {
   get message() {
     if (!this[ResponseMessage]) {
       // 加载 响应消息对象
+      const ctx = this;
       const resMsg = (function loadConfig(config) {
-        if (_.isArray(config)) return function(attach) { return { err: config[0], msg: config[1], attach }; };
+        if (_.isArray(config)) {
+          return function(attach) {
+            const m = { err: config[0], msg: config[1], attach };
+            ctx.logger.error('[%s | %s] %s', m.err, m.msg, m.attach);
+            return m;
+          };
+        }
         const msg = {};
         Object.keys(config).forEach(key => msg[key] = loadConfig(config[key]));
         return msg;
@@ -32,8 +39,8 @@ module.exports = {
     return { msg, err, data };
   },
 
-  returnError({ msg = '失败', err = 100, attach = null }) {
-    this.logger.error({ err, msg, attach });
+  returnError({ msg = '失败' }) {
+    // this.logger.error({ err, msg, attach });
     throw new Error(msg);
   },
 

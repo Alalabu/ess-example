@@ -10,7 +10,7 @@ module.exports = (options, app) => {
   return async (ctx, next) => {
 
     // 1.排除不需要验证 token 的路由
-    if (options.allowed.indexOf(ctx.request.url) > -1) return await next(options);
+    if (options.allowed.indexOf(ctx.request.path) > -1) return await next(options);
 
     // 2. 获取 header 头token
     const { authorization = '' } = ctx.header;
