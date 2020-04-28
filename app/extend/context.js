@@ -23,9 +23,20 @@ module.exports = {
       const ctx = this;
       const resMsg = (function loadConfig(config) {
         if (_.isArray(config)) {
-          return function(attach) {
-            const m = { err: config[0], msg: config[1], attach };
-            ctx.logger.error('[%s | %s] %s', m.err, m.msg, m.attach);
+          return function(data, detail) {
+            const m = { err: config[0], msg: config[1], data, detail };
+            // eslint-disable-next-line default-case
+            switch (config[2]) { // 对于错误的处理方式
+              case 'errlog':
+                ctx.logger.error('[%s | %s] %s :', m.err, m.msg, (detail || ''), m.data);
+                break;
+              case 'warnlog':
+                ctx.logger.warn('[%s | %s] %s :', m.err, m.msg, (detail || ''), m.data);
+                break;
+              case 'infolog':
+                ctx.logger.info('[%s | %s] %s :', m.err, m.msg, (detail || ''), m.data);
+                break;
+            }
             return m;
           };
         }
