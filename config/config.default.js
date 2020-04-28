@@ -45,9 +45,9 @@ module.exports = appInfo => {
   // 鉴权配置
   config.auth = {
     allowed: [// 排除的接口
-      '/login',
-      '/clientLogin',
-      '/getError',
+      '/province/findAll',
+      '/city/findAll',
+      '/district/findAll',
     ],
   };
 
@@ -56,7 +56,7 @@ module.exports = appInfo => {
    */
   config.cluster = {
     listen: {
-      port: 20980,
+      port: 50810,
     },
   };
 
@@ -76,17 +76,17 @@ module.exports = appInfo => {
     appsecret: '002f61118a6045d1ae7c49173805b0cd',
     server: {
       name: 'users',
-      port: 39091,
-      title: '用户服务',
-      describe: '这个服务用于作为 子服务1 进行测试...',
+      port: 50811,
+      title: '通用工具',
+      describe: '提供通用接口调用, 如城市、短信、图片操作等',
     },
     gateway: {
       host: '127.0.0.1',
-      port: 50005,
+      port: 50805,
       type: 'tcp',
-      version: 2.007,
+      version: 1.0,
     },
-    devLog: false,
+    devLog: true,
   };
 
   // const gongfu_kuaisong = {
@@ -108,7 +108,7 @@ module.exports = appInfo => {
     local: {
       host: '127.0.0.1',
       port: 53306,
-      database: 'luv_ticket',
+      database: 'sheu_shiji',
       username: 'root',
       password: 'root',
     },
@@ -155,8 +155,8 @@ module.exports = appInfo => {
   config.redis = {
     client: {
       port: 6379, // Redis port
-      host: '101.201.239.227', // Redis host http://101.201.239.227/
-      // host: '127.0.0.1',
+      // host: '101.201.239.227', // Redis host http://101.201.239.227/
+      host: '127.0.0.1',
       password: '',
       db: 0,
     },

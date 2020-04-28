@@ -4,11 +4,18 @@
 const Cryptojs = require('crypto-js');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const uuidv1 = require('uuid/v1');
 
 const ResponseMessageConfig = require('../../config/message.config.js');
 const ResponseMessage = Symbol('Response#Message');
 
 module.exports = {
+  get uuid32() {
+    return uuidv1().replace(/-/g, '');
+  },
+  get uuid36() {
+    return uuidv1();
+  },
   // 加载响应消息配置, 统一封装响应消息在 Context 中的调用
   get message() {
     if (!this[ResponseMessage]) {
