@@ -1,3 +1,11 @@
 {
-  "extends": "eslint-config-egg"
+  "extends": ["standard", "eslint-config-egg"],
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType":"module",
+    "ecmaFeatures":{
+      "experimentalObjectRestSpread":true,
+      "modules":true
+    }
+  }
 }
