@@ -48,6 +48,7 @@ module.exports = appInfo => {
       '/province/findAll',
       '/city/findAll',
       '/district/findAll',
+      '/clientLogin',
     ],
   };
 
@@ -76,7 +77,7 @@ module.exports = appInfo => {
     appsecret: '002f61118a6045d1ae7c49173805b0cd',
     server: {
       name: 'users',
-      port: 50811,
+      port: 50812,
       title: '通用工具',
       describe: '提供通用接口调用, 如城市、短信、图片操作等',
     },
@@ -84,7 +85,7 @@ module.exports = appInfo => {
       host: '127.0.0.1',
       port: 50805,
       type: 'tcp',
-      version: 1.0,
+      version: 1.2,
     },
     devLog: true,
   };

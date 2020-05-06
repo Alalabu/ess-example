@@ -17,6 +17,6 @@ module.exports = app => {
 
   // router.post('订单生成', '/newOrder', controller.user.newOrder);
 
-  // router.post('/clientLogin', controller.access.clientLogin);
+  router.post('/clientLogin', controller.access.clientLogin);
 
 };

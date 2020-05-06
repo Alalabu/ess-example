@@ -52,6 +52,43 @@ module.exports = {
   get jwt() {
     return jwt;
   },
+  /**
+   * 解析签名, 返回解析结果. true则为解析成功, false为解析失败
+   * @param {*} data 
+   * @param {*} secret 
+   * @param {*} sign 
+   */
+  equalsSign(data, secret, sign) {
+    // 1. 签名的 md5 解密(数据对比)
+    const md5 = crypto.createHash('md5');
+    const paramKeys = Object.keys(data);
+    paramKeys.sort();
+    const string1 = paramKeys.map((k) => data[k]).join('&');
+    const _sign = md5.update(`${string1}${secret}`).digest('hex');
+    // 4. 比对签名结果
+    return _sign === sign;
+  },
+
+  parseSign(data, secret){
+    const md5 = crypto.createHash('md5');
+    const paramKeys = Object.keys(data);
+    paramKeys.sort();
+    const string1 = paramKeys.map((k) => data[k]).join('&');
+    return md5.update(`${string1}${secret}`).digest('hex');
+  },
+  // 获取随机 (长度为 len) 的字符串
+  getNonceStr(len){
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < len; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  },
+  // 获取当前的时间戳
+  get timeStamp() {
+    return Number(`${(new Date()).getTime()}`.substring(0, 10));
+  },
 
   returnSuccess({ msg = '成功', err = 0, data = null }) {
     return { msg, err, data };
