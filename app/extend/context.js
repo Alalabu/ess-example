@@ -54,9 +54,9 @@ module.exports = {
   },
   /**
    * 解析签名, 返回解析结果. true则为解析成功, false为解析失败
-   * @param {*} data 
-   * @param {*} secret 
-   * @param {*} sign 
+   * @param {Object} data 参数列表
+   * @param {String} secret 密钥
+   * @param {String} sign 需要对比的签名
    */
   equalsSign(data, secret, sign) {
     // 1. 签名的 md5 解密(数据对比)
@@ -68,7 +68,11 @@ module.exports = {
     // 4. 比对签名结果
     return _sign === sign;
   },
-
+  /**
+   * 将参数和密钥进行 MD5 签名, 返回 sign 签名字符串
+   * @param {Object} data 参数列表
+   * @param {String} secret 密钥
+   */
   parseSign(data, secret){
     const md5 = crypto.createHash('md5');
     const paramKeys = Object.keys(data);
@@ -103,13 +107,15 @@ module.exports = {
     throw new Error(msg);
   },
 
-  crypto(value) {
-    return Cryptojs.HmacSHA256(value, 'drw_admin888').toString();
+  crypto(value, key = 'drw_admin888') {
+    return Cryptojs.HmacSHA256(value, key).toString();
   },
 
   /**
    * 生成 Token
-   * @param { Object } params token封装参数
+   * @param { Object } params token 封装参数
+   * @param { String } secret token 解码密钥
+   * @param { Number } expiresIn 生命周期, 单位: 秒
    */
   generateToken({ params = {}, secret, expiresIn = 24 * 60 * 60 }) {
     return jwt.sign(params, secret || this.app.config.jwt.secret, {
