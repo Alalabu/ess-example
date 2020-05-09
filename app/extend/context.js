@@ -5,6 +5,8 @@ const Cryptojs = require('crypto-js');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const uuidv1 = require('uuid/v1');
+const { Calendar } = require('calendar2');
+const Sequelize = require('sequelize');
 
 const ResponseMessageConfig = require('../../config/message.config.js');
 const ResponseMessage = Symbol('Response#Message');
@@ -15,6 +17,12 @@ module.exports = {
   },
   get uuid36() {
     return uuidv1();
+  },
+  get NOW() {
+    return new Calendar();
+  },
+  get Op() {
+    return Sequelize.Op;
   },
   // 加载响应消息配置, 统一封装响应消息在 Context 中的调用
   get message() {

@@ -125,6 +125,11 @@ $ rm -rf ./.github
 ctx.uuid32;
 // 每次调用, 获取一个 36 位 UUID
 ctx.uuid36;
+// 返回一个当前时间的 Calendar2 对象
+// 通过 ctx.NOW 下的 `toDate()` 或 `toDatetime()` 获取时间字符串
+ctx.NOW;
+// 返回一个 Sequelize.Op 对象
+ctx.Op;
 
 /**
  * 响应消息对象
