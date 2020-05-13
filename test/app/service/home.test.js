@@ -23,9 +23,15 @@ describe('test/app/service/Test.test.js', () => {
 
     // console.log('ctx.message : ', await ctx.service.area.provinceAll());
 
-    for (let index = 0; index < 10; index++) {
-      console.log('ctx.uuid32 : ', ctx.uuid32);
-    }
+    // console.log( 'token 365 : ', ctx.generateToken({ 
+    //   params: {
+    //     id: 'd2f3f530213811eaa6652ddf602a53ce',
+    //     openid: 'o2KHI5bwI8H51R8BQZrgBlOqsEq8',
+    //     unionid: null,
+    //   },
+    //   secret: app.config.jwt.secret,
+    //   expiresIn: (365 * 24 * 60 * 60)
+    // }) );
 
   });
 });

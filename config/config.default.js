@@ -102,7 +102,7 @@ module.exports = appInfo => {
     gongfu: {
       host: '39.104.190.35',
       port: 53306,
-      database: 'luv_ticket',
+      database: 'sheu_shiji',
       username: 'baihaiou9',
       password: 'sHeuN.DaTAbasE201.810',
     },

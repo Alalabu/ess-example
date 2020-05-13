@@ -12,9 +12,15 @@
 //   });
 
 //   it('should GET /', () => {
-//     return app.httpRequest()
-//       .get('/')
-//       .expect('hi, egg')
-//       .expect(200);
+
+//     const token = '';
+//     const headers = {
+//       authorization: token,
+//     };
+//     const data = {};
+//     return app.httpRequest().post(`/home`).send(data).set(headers).then( res => {
+//       console.log('/home => ', res.body);
+//     });
+
 //   });
 // });
