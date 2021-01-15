@@ -23,8 +23,10 @@ module.exports = {
     package: 'egg-redis',
   },
 
-  senecaSubserver: {
+  // 配置 amqplib
+  amqplib: {
     enable: true,
-    package: 'egg-seneca-subserver',
+    package: 'egg-amqplib',
   },
+
 };

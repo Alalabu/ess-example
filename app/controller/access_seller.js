@@ -1,7 +1,7 @@
 'use strict';
 
 const { Controller } = require('egg');
-const { ShiJi_Client } = require('../util/client-apps');
+const SJAPP = require('../util/client-apps');
 // const ProConf = project_config.default;
 // const { APP_SHEU_XIAOQUAN } = project_config;
 
@@ -9,7 +9,7 @@ const { ShiJi_Client } = require('../util/client-apps');
 // const Message = utils_message.default;
 // const { ErrorType } = utils_message;
 
-class AccessController extends Controller {
+class AccessSellerController extends Controller {
   /**
    * 使用 unionid 的登录方法
    * 通过 code 换取登录的 openid 和 unionid, 记录数据库
@@ -26,24 +26,28 @@ class AccessController extends Controller {
    *      Message
    *
    */
-  async clientLogin() {
+  async login() {
     const { ctx } = this;
     // 参数部分
-    const { loginCode } = ctx.request.body;
+    const { loginCode, phonenum } = ctx.request.body;
     // 首先通过 loginCode 换取 session_key (mmp)
-    const wxurl = `https://api.weixin.qq.com/sns/jscode2session?appid=${ShiJi_Client.appid}&secret=${ShiJi_Client.appsecret}&js_code=${loginCode}&grant_type=authorization_code`;
+    const wxurl = `https://api.weixin.qq.com/sns/jscode2session?appid=${SJAPP.Seller.appid}&secret=${SJAPP.Seller.appsecret}&js_code=${loginCode}&grant_type=authorization_code`;
     // 换取的结果中包含 openid 及 session_key
     const wx_result = (await ctx.curl(wxurl, { dataType: 'json' })).data;
     // openid不存在的情况
     if (!wx_result.openid) {
-      ctx.logger.warn(`系统审核用户登录 =>  OPENID = ${wx_result.openid}`);
-      ctx.body = { err: 10004, msg: 'WX_LOGIN_FAIL' };
+      ctx.body = ctx.message.access.noOpenid(wx_result); //noUnionidOrSessionKey
+      return;
+    }
+    const { openid, unionid } = wx_result;
+    // 不存在 unionid
+    if (!unionid) {
+      ctx.body = ctx.message.access.noUnionidOrSessionKey(wx_result);
       return;
     }
     // wx_result不包含unionid, 需要在 encryptedData 中通过 iv 解析出 unionid
     try {
-      const { openid, unionid } = wx_result;
-      ctx.body = await ctx.service.access.clientLogin(openid, unionid);
+      ctx.body = await ctx.service.accessSeller.login({openid, unionid, phonenum});
     } catch (error) {
       ctx.logger.error(error);
       ctx.body = { err: 10004, msg: '解析 openId 异常: ' + error };
@@ -51,4 +55,4 @@ class AccessController extends Controller {
   }// end: clientLogin
 }
 
-module.exports = AccessController;
+module.exports = AccessSellerController;

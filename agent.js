@@ -1,4 +1,6 @@
 'use strict';
+const _ = require('lodash');
+const { CacheBizTimesKey } = require('./app/util/redis-key');
 
 class AppBootHook {
 
@@ -31,6 +33,15 @@ class AppBootHook {
     // 应用已经启动完毕
     // 请将您的 app.beforeStart 中的代码置于此处。
     // console.log('[Agent 04] [didReady] ...');
+
+    // 重新初始化 开关店缓存
+    const Redis = this.app.redis;
+    if (Redis) {
+      const fields = await Redis.hkeys(CacheBizTimesKey);
+      if (!_.isArray(fields) || fields.length === 0) return 0;
+      await Redis.hdel.apply(Redis, [CacheBizTimesKey, ...fields]);
+      // this.hashDelete.apply(this, [key, ...fields]);
+    }
   }
 
   async serverDidReady() {

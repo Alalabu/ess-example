@@ -30,7 +30,7 @@ module.exports = app => {
       type: DataTypes.STRING,
     },
     gender: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     email: {
       type: DataTypes.STRING,
@@ -48,6 +48,9 @@ module.exports = app => {
   });
 
   XqClient.associate = () => {
+    XqClient.hasMany(app[modelName].Address, { foreignKey: 'client_id', targetKey: 'id' });
+    XqClient.hasMany(app[modelName].XqClientNst, { foreignKey: 'client_id', targetKey: 'id' });
+    XqClient.hasMany(app[modelName].OrderComment, { foreignKey: 'client_id', targetKey: 'id' });
     // XqClient.belongsTo(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
     // XqClient.hasMany(app[modelName].OtherModel, { foreignKey: 'foreignKey_id', targetKey: 'id' });
   };

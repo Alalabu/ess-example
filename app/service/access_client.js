@@ -14,33 +14,34 @@ class AccessService extends Service {
    * 若存在则返回 Partner 数据
    * @param openid string - your openid
    */
-  async clientLogin(openid, unionid) {
+  async login(openid, unionid) {
     const { ctx } = this;
     const where = { openid };
 
     try {
-      const { XqClient } = ctx.model;
-      let client = await XqClient.findOne({ where });
-      // console.log('【partnerLogin openid】=> ', openid);
+      const { XqClient, Address } = ctx.model;
+      let client = await XqClient.findOne({ where, include: [{ model: Address }], });
+      if (client) {
+        client = JSON.parse(JSON.stringify(client));
+      }
       if (!client) {
         // 用户不存在, 则添加新用户
-        client = await XqClient.create({ id: uuidv1(), openid, unionid });
+        client = await XqClient.create({ id: ctx.uuid32, openid, unionid });
         client = client.dataValues;
         // 创建并生成token,然后返回
         client.loginToken = ctx.generateToken({ params: { id: client.id, openid, unionid } });
-        return { desc: 'new_user', data: client };
+        return ctx.message.login.newuser(client);
       } else if (client && !client.unionid && unionid) {
         await XqClient.update({ unionid }, { where: { openid } });
+        client.unionid = unionid;
       }
       // 创建并生成token,然后返回
-      client = client.dataValues;
+      // client = client.dataValues;
       client.loginToken = ctx.generateToken({ params: { id: client.id, openid, unionid } });
-      // return { data: client };
-      return ctx.returnSuccess({ data: client });
+      // 返回正常用户信息
+      return ctx.message.success(client);
     } catch (err) {
-      this.logger.error('clientLogin => ', JSON.stringify(err));
-      console.log('【partnerLogin ERROR】=> ', err);
-      return { err: 1004, data: 'clientlogin exception!' };
+      return ctx.message.exception(err);
     }
   }
 }

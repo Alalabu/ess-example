@@ -10,13 +10,14 @@ class HomeService extends BaseService {
    * 查找女生最喜欢的10中食物, 以及销售量排名
    */
   async findAll({ cacheKey, pageIndex }) {
+    const { ctx } = this;
     const cacheData = await this.getCache(cacheKey);
     console.log('[Redis cacheData] in : ', cacheKey);
     if (cacheData) {
       console.log(`[Redis cacheData] use redis by cacheKey=${cacheKey}.`);
-      return cacheData;
+      return ctx.message.success(cacheData);
     }
-    const { ctx } = this;
+    
     const sequelize = ctx.model;
     const { Order, Address, Goods, Ordergoodsrelation } = ctx.model;
     // 调用 getConfig 接口

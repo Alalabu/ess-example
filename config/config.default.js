@@ -45,10 +45,26 @@ module.exports = appInfo => {
   // 鉴权配置
   config.auth = {
     allowed: [// 排除的接口
-      '/province/findAll',
-      '/city/findAll',
-      '/district/findAll',
-      '/clientLogin',
+      '/wechat/in',
+      '/util/province/findAll',
+      '/util/city/findAll',
+      '/util/district/findAll',
+      '/util/location/geocoder',
+      '/client/login',
+      '/seller/login',
+      '/order/client_pay/pay_notify',
+      '/order/client_pay/refund_notify',
+    ],
+    pa_allowed: [// pa的接口
+      '/mgr/banner/create','/mgr/banner/delete','/mgr/area/findAll','/mgr/area/tablesign','/mgr/seller/auditList',
+      '/mgr/seller/auditOne',
+      '/mgr/seller/audit','/mgr/seller/change_struts','/mgr/knight/create','/mgr/knight/update','/mgr/knight/remove',
+      '/mgr/store_tags/create', '/mgr/store_tags/update', '/mgr/store_tags/delete', '/mgr/store_tags/find',
+      '/mgr/order_tags/create', '/mgr/order_tags/update', '/mgr/order_tags/delete', '/mgr/order_tags/find',
+    ],
+    sa_allowed: [// sa的接口
+      '/mgr/area/create', '/mgr/area/update', '/mgr/area/delete', '/mgr/gm/create', '/mgr/gm/update', '/mgr/gm/delete', 
+      '/mgr/gm/change_auth', '/mgr/gm/find', '/mgr/gm/findAll',
     ],
   };
 
@@ -57,7 +73,7 @@ module.exports = appInfo => {
    */
   config.cluster = {
     listen: {
-      port: 50810,
+      port: 56000,
     },
   };
 
@@ -66,29 +82,29 @@ module.exports = appInfo => {
    */
   config.logger = {
     // outputJSON: true,
-    dir: '../logs/egg-seneca-server',
+    dir: '../logs/sheu-bianmin',
   };
 
   /**
    * egg-seneca-slot 配置
    */
-  config.senecaSubserver = {
-    appid: 'Alalabu',
-    appsecret: '002f61118a6045d1ae7c49173805b0cd',
-    server: {
-      name: 'users',
-      port: 50812,
-      title: '通用工具',
-      describe: '提供通用接口调用, 如城市、短信、图片操作等',
-    },
-    gateway: {
-      host: '127.0.0.1',
-      port: 50805,
-      type: 'tcp',
-      version: 1.2,
-    },
-    devLog: true,
-  };
+  // config.senecaSubserver = {
+  //   appid: 'Alalabu',
+  //   appsecret: '002f61118a6045d1ae7c49173805b0cd',
+  //   server: {
+  //     name: 'seller',
+  //     port: 50871,
+  //     title: '商户商品',
+  //     describe: '提供商户/商品相关操作等',
+  //   },
+  //   gateway: {
+  //     host: '127.0.0.1',
+  //     port: 50805,
+  //     type: 'tcp',
+  //     version: 1.2,
+  //   },
+  //   devLog: false,
+  // };
 
   // const gongfu_kuaisong = {
   //   host: '39.104.190.35',
@@ -125,7 +141,7 @@ module.exports = appInfo => {
   config.sequelize = {
     dialect: 'mysql',
     // ...gongfu_kuaisong,
-    ...SheuShiJiServer.local,
+    ...SheuShiJiServer.gongfu,
     timezone: '+08:00',
     pool: {
       max: 100,
@@ -146,6 +162,7 @@ module.exports = appInfo => {
     retry: { max: 3 },
     logging(sql) {
       // 数据库语句执行打印日志
+      // console.log('【SQL】 => ', sql); // appInfo
       console.log('【SQL】 => ', sql);
     },
   };
@@ -158,8 +175,32 @@ module.exports = appInfo => {
       port: 6379, // Redis port
       // host: '101.201.239.227', // Redis host http://101.201.239.227/
       host: '127.0.0.1',
-      password: '',
+      password: 'sheu_redis.20200429',
       db: 0,
+    },
+  };
+
+  // 配置 amqplib
+  config.amqplib = {
+    client: {
+      // url: 'amqp://localhost',
+      connectOptions: {
+        protocol: 'amqp',
+        hostname: 'localhost',
+        port: 5672,
+        username: 'bryan14',
+        password: 'bho2005',
+        locale: 'en_US',
+        frameMax: 0,
+        heartbeat: 0,
+        vhost: 'sheu',
+      },
+      // socketOptions: {
+      //   cert: certificateAsBuffer, // client cert
+      //   key: privateKeyAsBuffer, // client key
+      //   passphrase: 'MySecretPassword', // passphrase for key
+      //   ca: [caCertAsBuffer], // array of trusted CA certs
+      // },
     },
   };
 
